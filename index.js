@@ -4,12 +4,13 @@ from 0 to 100
  */
 
 const printNum = () => {
-    for (var i = 0; i <= 100; i++) {
+    for (let i = 0; i <= 100; i++) {
         setTimeout(() => console.log(i), 1000)
     }
 }
 
 printNum()
+
 
 /*
 2. Given the array below:
@@ -24,7 +25,17 @@ possibility.
 
 let myArr = ['12-24-2014', '09-2022-23', '12-30-2021', '08-02-2021', '07-15-2018', '2019-12-14', '2022-14-12']
 const fixDate = (array) => {
-    /* provide your code here */
+    let newList = []
+    
+    for(let i = 0; i < myArr.length;i++)
+    {
+    
+     let newVal = array[i].split('-').sort((a,b) => a-b )
+       newList.push(`${newVal[1]}-${newVal[0]}-${newVal[2]}`)
+        
+        
+    }
+    return newList
 }
 let newArr = fixDate(myArr)
 console.log(newArr)
@@ -37,7 +48,12 @@ Expected result in the console: 11 days - 13 hours - 38 minutes - 20 seconds
 const dateFrom = new Date(500000)
 const dateTo = new Date(1000000000)
 const counter = (from, to) => {
-    /* provide your code here */
+    let diff = to - from
+    let days = diff/(1000*60*60*24)
+    let hours = (days - Math.floor(days))*24
+    let minutes = (hours - Math.floor(hours))*60
+    let seconds = (minutes - Math.floor(minutes))*60
+   return `${Math.floor(days)} days - ${Math.floor(hours)} hours - ${Math.floor(minutes)} minutes -${Math.ceil(seconds)} seconds`
 }
 const timer = counter(dateFrom, dateTo)
 console.log(timer)
@@ -50,7 +66,8 @@ to array, and so on.
 */
 
 const generateNewFolderName = (existingFolders) => {
-    /*  provide your code here */
+    if(existingFolders.length === 0) return folder.push('New Folder')
+    else return folder.push(`New folder ${existingFolders.length}`)
 }
 
 let folder = []
@@ -66,13 +83,22 @@ The debounced function returned by debounce should wait until the delay time has
 If the debounced function is called again within the delay time, the timer should be reset and the callback function should be called after the delay time has passed. 
 Your solution should be implemented in JavaScript without using any third-party libraries or frameworks. */
 const debounce = (callback, timer) => {
-    //Your code goes here
+    let timeout;
+    return function () {
+      clearTimeout(timeout)
+      timeout = setTimeout(() => {callback()}, timer)
+    }
 }
 
 //This is the test code for the debounce function
 for (let i = 0; i < 5; i++) {
-    debounce(() => console.log("this should print out only once"), 1000)
+    debounce(() => console.log("this should print out only once"), 1000)()
 }
+
+/* 6. Create a function called cacheFunc that takes another function as an argument and returns a new function. 
+The new function should cache the result of the original function for each set of arguments that it's called with. 
+If the new function is called with the same arguments again, it should return the cached result, instead of calling the original function again. 
+The new function should have a cache property that stores the cached results. */
 
 /* 6. Create a function called cacheFunc that takes another function as an argument and returns a new function. 
 The new function should cache the result of the original function for each set of arguments that it's called with. 
@@ -81,7 +107,40 @@ The new function should have a cache property that stores the cached results. */
 
 const cacheFunc = (callback) => {
     //Your code goes here
+    
+    var store;
+    
+    return function (...args) {
+        
+        
+        if(store){
+            
+            if(JSON.stringify(store) === JSON.stringify(args)) {
+                
+                function storevalue (val1,val2) {
+                    
+                    console.log(val1 + val2)
+                    
+                }
+                return storevalue(store[0],store[1]) 
+                    
+                
+                // store = args
+                // return (val1,val2) => {val1 + val2}
+            } else {
+                store = args
+                return  callback(args[0],args[1])
+            }
+        } else {
+            store = args
+            return callback(args[0],args[1]) }
+    }
 }
+        
+
+    
+
+
 
 //This is the test code for cacheFunc
 const addition = (a, b) => {
@@ -115,6 +174,17 @@ const createRecipe = (name, instructions) => {
 }
 
 const withMetrics = (time, calories) => {
+    let newElem = {
+        time: time,
+        calories: calories
+    }
+    
+    return (args) => {
+        
+        let binding = args.printInstructions.bind(newElem)
+        binding()
+        return args
+    }
 
 }
 
