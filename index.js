@@ -166,7 +166,7 @@ const createRecipe = (name, instructions) => {
     return {
         name,
         instructions,
-        printInstructions: () => {
+        printInstructions: function () {
             console.log(`Instructions for ${this.name}:`)
             console.log(this.instructions + `for ${this.time} seconds. Contain ${this.calories} calories`)
         }
@@ -174,16 +174,15 @@ const createRecipe = (name, instructions) => {
 }
 
 const withMetrics = (time, calories) => {
-    let newElem = {
-        time: time,
-        calories: calories
-    }
-    
+   
     return (args) => {
+        args.time = time
+        args.calories = calories
         
-        let binding = args.printInstructions.bind(newElem)
-        binding()
+       args.printInstructions = args.printInstructions.bind(args)
         return args
+        
+        
     }
 
 }
